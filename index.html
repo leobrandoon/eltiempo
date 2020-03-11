@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> El Tiempo </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+
+    </style>
+
+
+</head>
+
+<body>
+    <div class="card text-center">
+        <div class="card-header" id="date">
+
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Special Weather Predictor </h5>
+            <p class="card-text">Enter the location you wish to consult</p>
+        </div>
+        <div class="col-sm-12">
+            <a href="#" class="btn btn-primary button">Go!</a>
+            <input type="text" id="city">
+        </div>
+        <div class="card-footer text-muted" id="clima_info">
+
+        </div>
+        <div class="card-footer text-muted" id="maps">
+
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script>
+        //agrga fecha actualizada
+        var f = new Date();
+        //document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear()); - esto escribe la fecha con formato
+        $('#date').append(new Date);
+
+
+        $(document).ready(function() {
+            $('form').on('submit', function(ev) {
+                ev.preventDefault();
+            });
+
+            $(document).on('click', '.button', function() {
+                var city = $("#city").val()
+                    // your code here (build up your url)
+                $.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=69ad7b2d4de4ca0ae3dfd86c4834ff30",
+
+
+                    function(res) {
+                        var climainfo = `
+                            <div id="clima_info">
+                                        <p>City: ${res.name}</p>
+                                        <p>Temp: ${res.main.temp}    F°</p>
+                                        <p>Coord: ${res.coord.lon} ,${res.coord.lat } </p>
+                            </div>
+                        `
+                        $('#clima_info').html(climainfo);
+                        // your code here`
+
+                        var latitud = res.coord.lon
+                        var longitud = res.coord.lat
+                        var location = `
+                        <iframe class="iframe" src="https://maps.google.com/?ll=${longitud},${latitud}&z=14&t=m&output=embed" height="600" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        `
+
+
+                        $('#maps').html(location);
+
+                    }, 'json');
+                // don't forget to return false so the page doesn't refresh
+                return false;
+            });
+
+
+        });
+    </script>
+
+</body>
+
+</html>
